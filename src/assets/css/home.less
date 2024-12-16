@@ -1,0 +1,98 @@
+.home {
+    .menu-list {
+        width: 180px;
+        max-width: 200px;
+        height: 100%;
+        position: fixed;
+
+        .ant-menu {
+            height: 100%;
+        }
+    }
+
+    .main-content {
+        margin-left: 180px;
+        transition: 0.3s;
+
+        &.menu-unfold {
+            // .main-content和.menu-list的margin-left同时存在
+            margin-left: 80px;
+        }
+
+        .content-top {
+            height: 50px;
+            line-height: 50px;
+            padding-left: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .bread {
+            padding-left: 10px;
+            display: inline-block;
+        }
+
+        .user-info {
+            float: right;
+            padding-right: 20px;
+            cursor: pointer;
+            text-align: center;
+
+            li {
+                padding: 0 20px;
+                list-style: none;
+
+                // 默认隐藏非第一个 li
+                &:not(:first-child) {
+                    display: none;
+                }
+            }
+
+            // 鼠标移入 .user-info 时显示所有 li
+            // 等同于.user-info:hover li { display: block; }
+            &:hover li {
+                display: block;
+            }
+
+            // 鼠标移入时，仅非第一个 li 背景变红
+            &:hover li:not(:first-child):hover {
+                background-color: #eee;
+                color: #999; // 可根据需求调整文字颜色
+                font-weight: 700; // 可选，增加强调效果
+            }
+        }
+
+
+        // .user-info {
+        //     float: right;
+        //     padding-right: 20px;
+        //     cursor: pointer;
+        //     text-align: center;
+
+        //     li:not(:first-child) {
+        //         display: none;
+
+        //         &:hover {
+        //             li {
+        //                 display: block;
+        //                 background-color: red;
+        //                 color: #999;
+        //                 font-weight: 700;
+        //             }
+        //         }
+        //     }
+
+        //     li {
+        //         padding: 0 20px;
+        //         list-style: none;
+        //     }
+
+        //     &:hover {
+        //         li {
+        //             display: block;
+        //         }
+        //     }
+
+
+        // }
+    }
+}
