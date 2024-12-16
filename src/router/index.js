@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/layout/HomeView.vue'
 import Login from '../views/layout/Login.vue'
-
+import store from '@/store/index'
 Vue.use(VueRouter)
 
 const routes = [
@@ -35,6 +35,21 @@ const routes = [
 
 const router = new VueRouter({
   routes
+})
+/**
+ * 路由前置守卫
+ */
+router.beforeEach((to,from,next)=>{
+  if(to.path !=='/login') {
+    const { userInfo } = store.state;
+    if (!userInfo.username && !userInfo.role && !userInfo.appkey) {
+      return next('/login');
+    } else {
+      return next();
+    }
+  } else {
+    return next();
+  }
 })
 
 export default router
