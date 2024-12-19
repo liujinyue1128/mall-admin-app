@@ -3,53 +3,127 @@ import VueRouter from 'vue-router'
 import HomeView from '../views/layout/HomeView.vue'
 import Login from '../views/layout/Login.vue'
 import store from '@/store/index'
+import getMenuRoutes from '@/utils/permission.js'
 Vue.use(VueRouter)
-
-const routes = [
+const aysncRouterMap = [
   {
-    path: '/home',
-    name: 'home',
+    path: '/product',
+    name: 'Product',
     component: HomeView,
+    meta: {
+      title: '商品'
+    },
     children: [
       {
-        path: '',
-        name: 'home-default',
-        // component: () => import('../views/HomeView.vue')
+        path: 'list',
+        name: 'ProductList',
+        meta: {
+          title: '商品列表'
+        },
+        component: () => import(/* webpackChunkName: "product" */ '../views/page/ProductList.vue')
+      },
+      {
+        path: 'add',
+        name: 'ProductAdd',
+        meta: {
+          title: '添加商品'
+        },
+        component: () => import(/* webpackChunkName: "product" */ '../views/page/ProductAdd.vue')
+      },
+      {
+        path: 'category',
+        name: 'Category',
+        meta: {
+          title: '类目管理'
+        },
+        component: () => import(/* webpackChunkName: "product" */ '../views/page/category.vue')
+      }
+    ]
+  }
+]
+const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: HomeView,
+    meta: {
+      title: '首页'
+    },
+    children: [
+      {
+        path: 'index',
+        name: 'Index',
+        meta: {
+          title: '统计'
+        },
+        // 这种引入方法就是"路由懒加载"
+        component: () => import(/* webpackChunkName: "home" */ '../views/page/index.vue')
       }
     ]
   },
   {
     path: '/login',
-    name: 'login',
+    name: 'Login',
     component: Login,
+    meta: {
+      title: '登录'
+    }
   },
-  {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
 ]
 
 const router = new VueRouter({
   routes
 })
+let isAddRoutes = false; // 是否已经添加了路由
 /**
  * 路由前置守卫
  */
-router.beforeEach((to,from,next)=>{
-  if(to.path !=='/login') {
-    const { userInfo } = store.state;
-    if (!userInfo.username && !userInfo.role && !userInfo.appkey) {
-      return next('/login');
-    } else {
-      return next();
-    }
-  } else {
+// router.beforeEach((to,from,next)=>{
+//   if(to.path !=='/login' ) {
+//     // 判断用户去的不是login
+//     if (store.state.userInfo.username && store.state.userInfo.role && store.state.userInfo.appkey) {
+//       // 添加路由
+//       if(!isAddRoutes) {
+//         const menuRoutes = getMenuRoutes(store.state.userInfo.role,aysncRouterMap);
+//         store.dispatch('changeMenuList',routes.concat(menuRoutes))
+//         router.addRoutes(menuRoutes);
+//       }
+//       // 判断用户是否符合用户条件 是否含有appkey
+//       return next();
+//     } 
+//     return next('/login');
+//   }
+//   return next();
+// })
+/**
+ * 路由前置守卫
+ */
+router.beforeEach((to, from, next) => {
+  // 如果目标路由是登录页，直接放行，防止循环重定向
+  if (to.path === '/login') {
     return next();
   }
-})
+
+  // 如果用户未登录
+  if (!store.state.userInfo.username || !store.state.userInfo.role || !store.state.userInfo.appkey) {
+    // 如果当前路由不是登录页，跳转到登录页
+    if (to.path !== '/login') {
+      return next('/login');
+    }
+  }
+
+  // 如果没有添加动态路由，进行添加
+  if (!isAddRoutes) {
+    const menuRoutes = getMenuRoutes(store.state.userInfo.role, aysncRouterMap);
+    store.dispatch('changeMenuList', routes.concat(menuRoutes)); // 更新路由
+    router.addRoutes(menuRoutes); // 动态添加路由
+    console.log('menuRoutes',store.state.menuList)
+    isAddRoutes = true; // 标记已经添加过路由
+  }
+
+  next(); // 放行
+});
+
+
 
 export default router

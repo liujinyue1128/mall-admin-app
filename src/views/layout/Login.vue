@@ -66,7 +66,7 @@ import api from '@/api/user.js'
               console.log(res)
               if (res.status == 'success') {
                 this.$message.success(res.msg);
-                this.$router.push({path: '/home'})
+                this.$router.push({path: '/'})
                 this.$store.dispatch('setUserInfo',res.data)
               } else {
                 this.$message.error(res.msg);

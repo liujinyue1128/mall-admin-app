@@ -8,6 +8,7 @@ export default new Vuex.Store({
     collapsed: false,
     // 用户信息
     userInfo: getUserCookie(),
+    menuList: [],// 菜单列表
   },
   
   getters: {
@@ -28,7 +29,10 @@ export default new Vuex.Store({
         role:'' ,
         email:''
       };
-    }
+    },
+    changeMenuList(state,list) {
+      state.menuList = list;
+    },
   },
   actions: {
     changeCollapsed ({ commit }) {
@@ -41,6 +45,9 @@ export default new Vuex.Store({
     setLayoutUserInfo ({ commit }, user) {
       commit('setLayoutUserInfo', user);
       removeUserCookie();
+    },
+    changeMenuList({ commit }, list) {
+      commit('changeMenuList', list);
     },
 
   },
