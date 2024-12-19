@@ -1,14 +1,19 @@
 import axios from "axios";
+import store from "./store";
 const request = axios.create({
-    baseURL:'https://mallapi.duyiedu.com'
+    baseURL:'https://mallapi.duyiedu.com',
 })
 request.interceptors.request.use((config)=>{
-    console.log(config);
-    if (config.url !== '/login') {
-        config.headers['Authorization'] = localStorage.getItem('token');
-        config.headers.token -= localStorage.getItem('token');
-    }
-    return config;
+    if (config.url.includes('/passport')) {
+      return config;
+    } 
+    return {
+        ...config,
+        params: {
+            ...config.params,
+            appkey: store.state.userInfo.appkey,
+        },
+    };
 },(error)=>{
     return Promise.reject(error)
 })

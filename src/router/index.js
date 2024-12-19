@@ -11,14 +11,18 @@ const aysncRouterMap = [
     name: 'Product',
     component: HomeView,
     meta: {
-      title: '商品'
+      title: '商品',
+      hidden: false,
+      icon: 'inbox'
     },
     children: [
       {
         path: 'list',
         name: 'ProductList',
         meta: {
-          title: '商品列表'
+          title: '商品列表',
+          hidden: false,
+          icon: 'unordered-list'
         },
         component: () => import(/* webpackChunkName: "product" */ '../views/page/ProductList.vue')
       },
@@ -26,7 +30,9 @@ const aysncRouterMap = [
         path: 'add',
         name: 'ProductAdd',
         meta: {
-          title: '添加商品'
+          title: '添加商品',
+          hidden: false,
+          icon: 'file-add'
         },
         component: () => import(/* webpackChunkName: "product" */ '../views/page/ProductAdd.vue')
       },
@@ -34,7 +40,9 @@ const aysncRouterMap = [
         path: 'category',
         name: 'Category',
         meta: {
-          title: '类目管理'
+          title: '类目管理',
+          hidden: false,
+          icon:'project'
         },
         component: () => import(/* webpackChunkName: "product" */ '../views/page/category.vue')
       }
@@ -47,14 +55,19 @@ const routes = [
     name: 'Home',
     component: HomeView,
     meta: {
-      title: '首页'
+      title: '首页',
+      hidden: false,
+      icon: 'home'
     },
+    redirect:'/index',
     children: [
       {
         path: 'index',
         name: 'Index',
         meta: {
-          title: '统计'
+          title: '统计',
+          hidden: false,
+          icon:'number'
         },
         // 这种引入方法就是"路由懒加载"
         component: () => import(/* webpackChunkName: "home" */ '../views/page/index.vue')
@@ -66,7 +79,8 @@ const routes = [
     name: 'Login',
     component: Login,
     meta: {
-      title: '登录'
+      title: '登录',
+      hidden: true,
     }
   },
 ]
@@ -115,9 +129,10 @@ router.beforeEach((to, from, next) => {
   // 如果没有添加动态路由，进行添加
   if (!isAddRoutes) {
     const menuRoutes = getMenuRoutes(store.state.userInfo.role, aysncRouterMap);
-    store.dispatch('changeMenuList', routes.concat(menuRoutes)); // 更新路由
-    router.addRoutes(menuRoutes); // 动态添加路由
-    console.log('menuRoutes',store.state.menuList)
+    store.dispatch('changeMenuList', routes.concat(menuRoutes)).then(()=>{
+      next()
+      router.addRoutes(menuRoutes); // 动态添加路由
+    }); // 更新路由
     isAddRoutes = true; // 标记已经添加过路由
   }
 

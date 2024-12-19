@@ -4,9 +4,9 @@
           <a-icon :type="$store.state.collapsed ? 'menu-unfold' : 'menu-fold'" />
         </a-button>
         <div class="bread">
-          <a-breadcrumb>
-            <a-breadcrumb-item>首页</a-breadcrumb-item>
-            <a-breadcrumb-item>统计</a-breadcrumb-item>
+          <a-breadcrumb  v-if="currentRoute.length > 1">
+            <a-breadcrumb-item>{{currentRoute[0] ? currentRoute[0].meta.title : ''}}</a-breadcrumb-item>
+            <a-breadcrumb-item>{{currentRoute[1] ? currentRoute[1].meta.title : ''}}</a-breadcrumb-item>
           </a-breadcrumb>
         </div>
         <div class="user-info">
@@ -20,6 +20,20 @@
 </template>
 <script>
 export default {
+  data() {
+    return {
+      currentRoute: this.$router.currentRoute.matched
+    };
+  },
+  watch: {
+    '$route'(){
+      this.currentRoute = this.$router.currentRoute.matched;
+   },
+   immediate: true,
+   deep: true
+  },
+  created() {
+  },
   methods: {
     /**
      * 1. 退出登录

@@ -1,3 +1,16 @@
 <template>
-    <div>统计页面</div>
+    <div class="index">
+        <Card/>
+        <Cart/>
+    </div>
 </template>
+<script>
+import Card from '@/components/card.vue';
+import Cart from '@/components/echarts.vue';
+export default {
+    components: {
+        Card,
+        Cart
+    },
+};
+</script>

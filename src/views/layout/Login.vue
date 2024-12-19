@@ -59,11 +59,9 @@ import api from '@/api/user.js'
     },
     methods: {
       submitForm(formName) {
-        console.log('this',this.ruleForm)
         this.$refs[formName].validate(valid => {
           if (valid) {
             api.loginApi(this.ruleForm).then(res=>{
-              console.log(res)
               if (res.status == 'success') {
                 this.$message.success(res.msg);
                 this.$router.push({path: '/'})
