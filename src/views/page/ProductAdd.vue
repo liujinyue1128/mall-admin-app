@@ -1,3 +1,5 @@
 <template>
-    <div>新增商品</div>
+    <div class="product-list-add"></div>
 </template>
+<style lang="less">
+</style>

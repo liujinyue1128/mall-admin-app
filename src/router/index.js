@@ -37,6 +37,16 @@ const aysncRouterMap = [
         component: () => import(/* webpackChunkName: "product" */ '../views/page/ProductAdd.vue')
       },
       {
+        path: 'edit/:id',
+        name: 'ProductEdit',
+        meta: {
+          title: '编辑商品',
+          hidden: true,
+          icon: 'file-add'
+        },
+        component: () => import(/* webpackChunkName: "product" */ '../views/page/ProductAdd.vue')
+      },
+      {
         path: 'category',
         name: 'Category',
         meta: {

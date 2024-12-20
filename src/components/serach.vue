@@ -24,7 +24,6 @@
     </div>
   </template>
   <script>
-  import api from "@/api/category.js";
   export default {
     data() {
       return {
@@ -32,19 +31,12 @@
             searchWord: '',
             category:''
         },
-        categoryList: [],
       };
     },
-    created () {
-        console.log('api',api)
-        this.initCategoryList()
-    },
-    mounted() {
-
-    },
+    props: ['categoryList'],
     methods: {
-      handleSubmit(e) {
-        console.log(this.searchForm);
+      handleSubmit(value) {
+        this.$emit('submitInput', this.searchForm);
       },
       /**
        * 切换类目时候触发的函数
@@ -53,13 +45,7 @@
         this.searchForm.category = value
         this.$emit('submit',this.serarchForm)
       },
-      async initCategoryList () {
-        const res = await api.getCategoryList();
-        if (res.status == 'success') {
-            this.categoryList = res.data.data
-            console.log('我是类目列表',res)
-        }
-      },
+     
     },
   };
   </script>
